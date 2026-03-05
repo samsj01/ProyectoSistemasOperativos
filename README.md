@@ -16,17 +16,17 @@ Este proyecto consiste en un simulador en consola que representa una fila de ate
 
 ##  4. Arquitectura de Módulos
 ProyectoSistemasOperativos/
-│
-├── src/
-│   └── main.py
-│
-├── mock/
-│   └── mock.png
-│
-├── propuesta/
-│   └── Propuesta_Tecnica.pdf
-│
-└── README.md
+*│
+*├── src/
+*│   └── main.py
+*│
+*├── mock/
+*│   └── mock.png
+*│
+*├── propuesta/
+*│   └── Propuesta_Tecnica.pdf
+*│
+*└── README.md
 
 ##  5. Alcances
 * **E1**
