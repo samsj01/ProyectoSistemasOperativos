@@ -1,37 +1,85 @@
-import tkinter as tk
-from tkinter import ttk
-import psutil # Debes instalarlo: pip install psutil
+def ingresar_personas():
+    nombres = []
+    tiempos = []
 
-class App:
-    def __init__(self, root):
-        root.title("Monitor & Simulador SO - Equipo XX")
-        root.geometry("800x600")
-        
-        self.label = tk.Label(root, text="Procesos Reales del Sistema", font=('Arial', 14, 'bold'))
-        self.label.pack(pady=10)
+    while True:
+        print("\n--- INGRESAR PERSONA ---")
+        nombre = input("Nombre: ")
+        tiempo = int(input("Tiempo de atención (minutos): "))
 
-        # Tabla para mostrar procesos
-        self.tree = ttk.Treeview(root, columns=("PID", "Nombre", "CPU %"), show='headings')
-        self.tree.heading("PID", text="PID")
-        self.tree.heading("Nombre", text="Nombre")
-        self.tree.heading("CPU %", text="CPU %")
-        self.tree.pack(fill='both', expand=True)
+        nombres.append(nombre)
+        tiempos.append(tiempo)
 
-        self.actualizar_procesos()
+        opcion = input("\n1. Agregar otra persona\n2. Continuar\nSeleccione: ")
 
-    def actualizar_procesos(self):
-        # Limpiar tabla
-        for i in self.tree.get_children():
-            self.tree.delete(i)
-        
-        # Obtener procesos reales
-        for proc in list(psutil.process_iter(['pid', 'name', 'cpu_percent']))[:15]:
-            self.tree.insert("", "end", values=(proc.info['pid'], proc.info['name'], proc.info['cpu_percent']))
-        
-        # Refrescar cada 5 segundos
-        root.after(5000, self.actualizar_procesos)
+        if opcion == "2":
+            break
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = App(root)
-    root.mainloop()
+    return nombres, tiempos
+
+
+def mostrar_gantt(nombres, tiempos):
+    print("\n==================================")
+    print("ORDEN DE ATENCIÓN - FIFO")
+    print("==================================\n")
+
+    tiempo_actual = 0
+
+    for i in range(len(nombres)):
+        nombre = nombres[i]
+        tiempo = tiempos[i]
+
+        print(nombre + " " + " " * tiempo_actual + "#" * tiempo)
+
+        tiempo_actual = tiempo_actual + tiempo
+
+    input("\nPresione ENTER para ver métricas...")
+
+
+def mostrar_metricas(nombres, tiempos):
+    print("\n==================================")
+    print("MÉTRICAS")
+    print("==================================\n")
+
+    tiempo_actual = 0
+    total_espera = 0
+    total_sistema = 0
+
+    for i in range(len(nombres)):
+        nombre = nombres[i]
+        tiempo = tiempos[i]
+
+        tiempo_espera = tiempo_actual
+        tiempo_sistema = tiempo_espera + tiempo
+
+        total_espera = total_espera + tiempo_espera
+        total_sistema = total_sistema + tiempo_sistema
+
+        print("Persona:", nombre)
+        print("Tiempo de espera:", tiempo_espera)
+        print("Tiempo total en sistema:", tiempo_sistema)
+        print()
+
+        tiempo_actual = tiempo_actual + tiempo
+
+    cantidad = len(nombres)
+
+    promedio_espera = total_espera / cantidad
+    promedio_sistema = total_sistema / cantidad
+
+    print("Tiempo promedio de espera:", round(promedio_espera, 2))
+    print("Tiempo promedio en sistema:", round(promedio_sistema, 2))
+
+
+
+def main():
+    print("==================================")
+    print("   SIMULADOR DE FILA FIFO")
+    print("==================================")
+
+    nombres, tiempos = ingresar_personas()
+    mostrar_gantt(nombres, tiempos)
+    mostrar_metricas(nombres, tiempos)
+
+
+main()
