@@ -21,14 +21,12 @@ flowchart TD
     A[ProyectoSistemasOperativos]
 
     A --> B[mock]
-    A --> C[propuesta]
-    A --> D[src]
-    A --> E[README.md]
+    A --> C[src]
+    A --> D[README.md]
 
-    C --> F[propuesta.pdf]
 
-    D --> G[main.py]
-    B --> I[mock.png]
+    C --> G[main.py]
+    B --> I[mock.pdf]
     
 ```
 
