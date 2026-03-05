@@ -14,19 +14,23 @@
 ##  3. Descripción Breve
 Este proyecto consiste en un simulador en consola que representa una fila de atención utilizando el principio de First In, Fisrt Out. Esl sistema permite ingresar personas con su tiempo de atención, simular el orden en que son atendidas y calcular métricas como el tiempo de espera y el tiempo total en el sistema. Se busca mas que nada comprender el orden de llegada que influye en los tiempos de atención dentro de un proceso secuencial. 
 
-##  4. Arquitectura de Módulos
-ProyectoSistemasOperativos/
-*│
-*├── src/
-*│   └── main.py
-*│
-*├── mock/
-*│   └── mock.png
-*│
-*├── propuesta/
-*│   └── Propuesta_Tecnica.pdf
-*│
-*└── README.md
+## 4. Arquitectura de Módulos
+
+```mermaid
+flowchart TD
+    A[ProyectoSistemasOperativos]
+
+    A --> B[mock]
+    A --> C[propuesta]
+    A --> D[src]
+    A --> E[README.md]
+
+    C --> F[propuesta.pdf]
+
+    D --> G[main.py]
+    B --> I[mock.png]
+    
+```
 
 ##  5. Alcances
 * **E1**
