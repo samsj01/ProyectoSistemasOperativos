@@ -1,0 +1,7 @@
+[19:42:18] === INICIANDO EJECUCIÓN CON GESTIÓN DE MEMORIA ===
+[19:42:18] --- Siguiente: sam (Pide 200MB) ---
+[19:42:18] ESTADO: sam Esta siendo Atendido. Uso actual: 200/1000MB
+[19:42:18] FINALIZADO: sam liberó RAM. RAM Disponible: 1000MB
+[19:42:18] --- Siguiente: isa (Pide 300MB) ---
+[19:42:18] ESTADO: isa Esta siendo Atendido. Uso actual: 300/1000MB
+[19:42:19] FINALIZADO: isa liberó RAM. RAM Disponible: 1000MB
