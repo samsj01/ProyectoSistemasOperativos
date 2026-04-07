@@ -1,3 +1,4 @@
+
 import time
 import threading
 
@@ -26,9 +27,9 @@ def ingresar_personas():
     memorias = []
     while True:
         print("\n--- INGRESAR PROCESO/PERSONA ---")
-        nombre = input("Nombre del proceso: ")
-        tiempo = int(input("Ciclos de CPU (Tiempo): "))
-        memoria = int(input("Memoria requerida (MB): "))
+        nombre = input("Nombre de la persona: ")
+        tiempo = int(input("turnos de espera: "))
+        memoria = int(input("Duracion de la atención (MB): "))
         nombres.append(nombre)
         tiempos.append(tiempo)
         memorias.append(memoria)
@@ -52,11 +53,11 @@ def ejecutar_proceso(nombre, cpu_necesario, mem_necesaria, resultados, indice):
             memoria_en_uso += mem_necesaria
             modo = "RAM"
             velocidad = 0.1
-            guardar_log(f"[{nombre}] → RAM asignada ({mem_necesaria}MB). Uso total: {memoria_en_uso}/{MEMORIA_RAM_TOTAL}MB")
+            guardar_log(f"[{nombre}] -> RAM/Duración asignada ({mem_necesaria}MB). Uso total: {memoria_en_uso}/{MEMORIA_RAM_TOTAL}MB")
         else:
             modo = "SWAP (Disco)"
             velocidad = 0.5
-            guardar_log(f"[{nombre}] → Sin RAM disponible, usando SWAP (lento)")
+            guardar_log(f"[{nombre}] -> Sin RAM disponible/Duración muy extensa, usando SWAP (lento)")
 
     # Ejecución de ciclos (fuera del lock para permitir concurrencia real)
     tiempo_inicio = time.time()
@@ -71,9 +72,9 @@ def ejecutar_proceso(nombre, cpu_necesario, mem_necesaria, resultados, indice):
     if modo == "RAM":
         with lock_memoria:
             memoria_en_uso -= mem_necesaria
-            guardar_log(f"[{nombre}] ✓ Finalizado en {tiempo_total}s | RAM liberada. Disponible: {MEMORIA_RAM_TOTAL - memoria_en_uso}MB")
+            guardar_log(f"[{nombre}]  Finalizado en {tiempo_total}s | RAM liberada. Disponible: {MEMORIA_RAM_TOTAL - memoria_en_uso}MB")
     else:
-        guardar_log(f"[{nombre}] ✓ Finalizado en {tiempo_total}s | Terminó en SWAP.")
+        guardar_log(f"[{nombre}]  Finalizado en {tiempo_total}s | Terminó en SWAP.")
 
     # Guardar resultado para métricas
     resultados[indice] = tiempo_total
@@ -137,8 +138,8 @@ def mostrar_metricas(nombres, tiempos, tiempos_reales):
         total_sistema += tiempo_sistema
 
         print(f"Proceso: {nombre}")
-        print(f"  - Ciclos estimados:    {tiempo}")
-        print(f"  - Tiempo real (s):     {real}")
+        print(f"  - Turnos estimados:    {tiempo}")
+        print(f"  - Tiempo 'real' (min):     {real}")
         print(f"  - Tiempo espera FIFO:  {tiempo_espera}")
         print(f"  - Tiempo total FIFO:   {tiempo_sistema}\n")
 
@@ -147,13 +148,13 @@ def mostrar_metricas(nombres, tiempos, tiempos_reales):
     promedio_espera = total_espera / len(nombres)
     print(f"Promedio de espera:    {round(promedio_espera, 2)}")
     print(f"Promedio en sistema:   {round(total_sistema / len(nombres), 2)}")
-    print(f"\nNota: Los procesos corrieron en paralelo (hilos reales).")
-    print(f"      La sincronización con Lock evitó condiciones de carrera en la RAM.")
+    print(f"\nNota: Los procesos corrieron en paralelo.\nLa sincronización con Lock evitó condiciones de carrera en la RAM.")
+    
 
 
 def main():
     print("==================================")
-    print("  SIMULADOR SO: FIFO + MEMORIA")
+    print("  SIMULADOR SO: Espera de atención")
     print("  + Concurrencia y Sincronización")
     print("==================================")
 
