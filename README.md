@@ -1,18 +1,47 @@
-# Simulador de turnos en una fila.
 
-##  1. Nombre del Equipo e Integrantes
-* **Nombre del Equipo:** 
+# Simulador de Turnos en una Fila - HTTP Server Load Simulator
+
+## 1. Nombre del Equipo e Integrantes
+* **Nombre del Equipo:** (Ingresa aquí el nombre de tu equipo)
 * **Integrantes:**
     * Samuel Suarez Jaramillo
     * Juan Camilo Agudelo Arias
     * Emmanuel Cardona Llanos
 
-##  2. Nombre y Modalidad del Proyecto
-* **Nombre:** Simulador de turnos en una fila.
-* **Modalidad:** Base.
+## 2. Nombre y Modalidad del Proyecto
+* **Nombre:** Simulador de turnos en una fila (Gestión de Hilos, RAM/SWAP y Latencia de Peticiones).
+* **Modalidad:** Proyecto Base (Evolucionado a simulación de concurrencia en SO).
 
-##  3. Descripción Breve
-Este proyecto consiste en un simulador en consola que representa una fila de atención utilizando el principio de First In, Fisrt Out. Esl sistema permite ingresar personas con su tiempo de atención, simular el orden en que son atendidas y calcular métricas como el tiempo de espera y el tiempo total en el sistema. Se busca mas que nada comprender el orden de llegada que influye en los tiempos de atención dentro de un proceso secuencial. 
+## 3. Descripción Breve
+Este proyecto consiste en un simulador académico de consola que representa el comportamiento de un balanceador de carga y un servidor web procesando peticiones concurrentes. El sistema demuestra de forma práctica cómo los **Sistemas Operativos** gestionan la multiprogramación, la asignación de memoria física (RAM) frente a la memoria virtual (SWAP), la planificación de la CPU (estrategias FIFO y SJF) y el uso de mecanismos de sincronización para evitar condiciones de carrera en secciones críticas.
+
+---
+
+
+
+### 1. Aplicación Real de Conceptos de SO & Simulación 
+El simulador modela rigurosamente los estados de transición de los procesos y la gestión de memoria de un sistema operativo real:
+* **Planificación FIFO:** Procesa los hilos secuencialmente respetando el orden de llegada a la cola.
+* **Planificación SJF:** Optimiza el orden basándose en la carga de CPU (ciclos de procesamiento) para minimizar el tiempo de espera promedio.
+* **Gestión de Memoria Virtual:** Si una petición sobrepasa la `MEMORIA_RAM_TOTAL` (1000MB), el SO emula una paginación derivando el hilo a **SWAP (Disco)**, penalizando su velocidad de ejecución debido a la alta latencia del almacenamiento secundario.
+
+### 2. Procesos Reales y Concurrencia 
+* El sistema genera un **Worker Thread independiente** (`threading.Thread`) para cada petición HTTP mapeada desde la consola.
+* Los hilos se ejecutan de manera concurrente en el procesador, permitiendo visualizar en tiempo real cómo interactúan, se superponen y compiten por los recursos del sistema.
+
+### 3. Sincronización y Sección Crítica 
+El acceso a recursos globales compartidos (`memoria_en_uso`, archivo físico de logs y salida estándar `print`) genera potenciales condiciones de carrera (*Race Conditions*). Para resolverlo, se implementaron **Locks de exclusión mutua (Mutex)**:
+* **`lock_memoria`**: Garantiza que la verificación y asignación de la RAM sea una operación atómica.
+* **`lock_log`**: Evita la corrupción y el entrelazado de cadenas de texto cuando varios hilos escriben concurrentemente en el archivo y en la pantalla.
+
+### 4. Monitoreo y Uso de Recursos 
+El programa genera un archivo de salida llamado `reporte_rendimiento_web.txt` que calcula de forma automática:
+* Tiempo real de CPU consumido.
+* Tiempo de espera en la cola de planificación.
+* Tiempo total de retorno del sistema (*Turnaround Time*).
+* Análisis comparativo de latencias promedio entre FIFO y SJF.
+
+---
 
 ## 4. Arquitectura de Módulos
 
@@ -24,96 +53,64 @@ flowchart TD
     A --> C[src]
     A --> D[README.md]
 
-
     C --> G[main.py]
+    C --> H[log_servidor.txt]
+    C --> K[reporte_rendimiento_web.txt]
     B --> I[mock.pdf]
-    
+
 ```
 
-##  5. Alcances
-* **E1**
-**1. crear personas (Nombre, tiempo de atención)**
-**2. Simular orden FIFO**
-**3.Calcular:**
-- Tiempo de espera
-- Tiempo total en el sistema
-- Promedios
+---
 
-* **E2**
-- Ingresar las personas a gusto
-- Agregar opción de prioridad como adultos mayores, niños, personas con discapacidad, etc.
-- Validaciones de entrada
+## 5. Alcances por Entrega
 
-* **E3**
-- Interfaz mejorada para guardar resultados en archivo
-- Se agrega un simulador de SJF para organizar las prioridades de atención.
+### Entrega 1 – Funcionalidad Básica
+
+* **Funciona:**
+1. Creación de entidades/personas ingresando ID y tiempo de atención (Ciclos de CPU).
+2. Simulación secuencial bajo el principio FIFO.
+3. Cálculo básico del tiempo de espera y tiempo total en el sistema.
 
 
+* **No incluía aún:** Sistema de prioridades por hardware, validaciones controladas de tipos de datos, soporte para múltiples algoritmos de planificación, ni persistencia en disco de reportes.
 
-# 6. Alcances por Entrega
+### Entrega 2 – Mejora de Entrada y Prioridades
 
-## Entrega 1 – Funcionalidad Básica
-
-### Funciona
-
-1. Creación de personas ingresando:
-   - Nombre  
-   - Tiempo de atención  
-2. Simulación del algoritmo FIFO.
-3. Cálculo automático de:
-   - Tiempo de espera por persona  
-   - Tiempo total en el sistema  
-   - Promedio de tiempo de espera  
-   - Promedio de tiempo total  
-4. Representación básica del orden de atención en consola (tipo Gantt simple).
-
-### No incluye aún
-- Sistema de prioridades  
-- Validaciones avanzadas  
-- Otros algoritmos de planificación  
-- Guardado de resultados en archivo
+* **Funciona:**
+1. Ingreso dinámico y libre de solicitudes según lo requiera el usuario.
+2. Sanitización y validaciones robustas de entrada (`try-except ValueError`) para evitar desbordamientos o caracteres inválidos en tiempos y memorias.
+3. Control por tipos de perfiles/prioridades (Adulto mayor, Niño, Persona con discapacidad, Usuario normal) que alteraban la cola antes del despacho.
 
 
-## Entrega 2 – Mejora de Entrada y Prioridades
 
-### Funciona
+### Entrega 3 – Extensión del Proyecto (Resultado Final)
 
-1. Ingreso libre de personas (el usuario decide cuántas agregar).
-2. Validaciones básicas:
-   - Que el tiempo de atención sea numérico.
-   - Que no se permitan valores negativos.
-   - Que el nombre no esté vacío.
-3. Opción de prioridad:
-   - Adulto mayor  
-   - Niño  
-   - Persona con discapacidad  
-   - Usuario normal  
+* **Funciona:**
+1. Incorporación del modelo de **Gestión de Memoria y Concurrencia** a través de hilos reales del sistema operativo.
+2. Implementación completa y funcional del algoritmo **SJF (Shortest Job First)**.
+3. Inclusión del entorno de Memoria Virtual (RAM vs SWAP) con penalización de latencia por saturación.
+4. Módulo de persistencia que exporta los logs detallados (`log_servidor.txt`) y las métricas analíticas comparativas (`reporte_rendimiento_web.txt`).
 
-El sistema reorganiza la fila respetando el nivel de prioridad antes de ejecutar la simulación.
 
-### No incluye aún
-- Comparación entre algoritmos  
-- Guardado automático en archivo  
-- Simulador SJF  
 
-## Entrega 3 – Extensión del Proyecto
+---
 
-### Funciona
+##  Evidencia de Trazabilidad y Comportamiento del Servidor
 
-1. Interfaz de consola mejorada:
-   - Menú interactivo
-   - Opción para repetir simulaciones
-   - Opción para guardar resultados en archivo `.txt`
-   - 
-2. Implementación del algoritmo **SJF (Shortest Job First)**.
-3. Comparación entre:
-   - FIFO  
-   - SJF  
-4. Visualización de métricas comparativas:
-   - Promedio de espera por algoritmo  
-   - Promedio de tiempo total  
+A continuación se exponen fragmentos reales extraídos de la ejecución del sistema, donde se observa el comportamiento del planificador, el mapeo de hilos y la administración del pool de memoria:
 
-## Resultado Final del Proyecto
+### Trazabilidad con Gestión de Memoria Activa
 
-El sistema permite analizar cómo distintos métodos de organización (FIFO y SJF) afectan los tiempos de espera y retorno en una fila de atención, permitiendo comparar su eficiencia dentro de un entorno simulado en consola.
+---
 
+##  Preparación para la Sustentación Individual 
+
+Cada uno de los integrantes del equipo (Samuel, Juan Camilo y Emmanuel) domina y está en total capacidad de explicar ante el docente los siguientes conceptos clave aplicados en el software:
+
+1. **Hilo vs Proceso:** Explicar por qué las peticiones corren sobre hilos del sistema operativo (`threading.Thread`) compartiendo el mismo espacio de dirección de memoria globales del servidor.
+2. **Sección Crítica Real:** Justificar por qué la concurrencia rompería el límite de los `1000MB` si se removieran las directivas `with lock_memoria` al permitir que dos hilos evalúen la condición al mismo tiempo.
+3. **Mapeo de Estados:** Identificar en el código la transición desde el estado de *Listo* (llamada al método `.start()`), *Ejecución* (dentro del ciclo `for` de procesamiento de CPU), *Bloqueado/Espera* (`time.sleep`) y *Terminado* (al finalizar la función y liberar los descriptores).
+
+```
+
+```
