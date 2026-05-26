@@ -1,0 +1,19 @@
+
+==================================================
+          REPORTE COMPARATIVO FINAL
+==================================================
+
+>>> RESULTADOS ALGORITMO FIFO:
+ Proceso isa -> CPU: 5 | Tiempo Real: 0.5s | Espera: 0s | Total Sistema: 0.5s
+ Proceso cami -> CPU: 13 | Tiempo Real: 5.21s | Espera: 0.5s | Total Sistema: 5.71s
+ * Promedio Espera FIFO: 0.25s
+ * Promedio Sistema FIFO: 3.1s
+
+>>> RESULTADOS ALGORITMO SJF:
+ Proceso isa -> CPU: 5 | Tiempo Real: 0.54s | Espera: 0s | Total Sistema: 0.54s
+ Proceso cami -> CPU: 13 | Tiempo Real: 5.21s | Espera: 0.54s | Total Sistema: 5.75s
+ * Promedio Espera SJF: 0.27s
+ * Promedio Sistema SJF: 3.15s
+
+==================================================
+ Conclusión: Rendimientos similares según carga de trabajo.

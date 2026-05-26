@@ -1,0 +1,18 @@
+[19:08:45] 
+=== INICIANDO EJECUCIÓN CON ALGORITMO: FIFO ===
+[19:08:45] --- [isa] iniciando (hilo Hilo-isa) ---
+[19:08:45] [isa] -> Asignada RAM (300MB). Uso total: 300/1000MB
+[19:08:45] --- [cami] iniciando (hilo Hilo-cami) ---
+[19:08:45] [cami] -> Sin RAM suficiente. Enviado a SWAP
+[19:08:45] [isa] Finalizado en 0.5s | RAM liberada. Disponible: 1000MB
+[19:08:50] [cami] Finalizado en 5.21s | Terminó ejecución desde SWAP.
+[19:08:50] === TODOS LOS PROCESOS TERMINARON BAJO FIFO ===
+[19:08:52] 
+=== INICIANDO EJECUCIÓN CON ALGORITMO: SJF ===
+[19:08:52] --- [isa] iniciando (hilo Hilo-isa) ---
+[19:08:52] --- [cami] iniciando (hilo Hilo-cami) ---
+[19:08:52] [isa] -> Asignada RAM (300MB). Uso total: 300/1000MB
+[19:08:52] [cami] -> Sin RAM suficiente. Enviado a SWAP
+[19:08:53] [isa] Finalizado en 0.54s | RAM liberada. Disponible: 1000MB
+[19:08:57] [cami] Finalizado en 5.21s | Terminó ejecución desde SWAP.
+[19:08:57] === TODOS LOS PROCESOS TERMINARON BAJO SJF ===
