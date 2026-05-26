@@ -2,7 +2,7 @@
 # Simulador de Turnos en una Fila - HTTP Server Load Simulator
 
 ## 1. Nombre del Equipo e Integrantes
-* **Nombre del Equipo:** (Ingresa aquí el nombre de tu equipo)
+* **Nombre del Equipo:** 
 * **Integrantes:**
     * Samuel Suarez Jaramillo
     * Juan Camilo Agudelo Arias
